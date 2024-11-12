@@ -1,0 +1,1 @@
+export const COUNTER_VALUE = "COUNTER_VALUE"
