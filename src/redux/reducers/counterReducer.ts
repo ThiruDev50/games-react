@@ -1,6 +1,6 @@
 import * as types from '../actions/actionTypes'
 
-const counterReducer = (state = {}, action) => {
+const counterReducer = (state = {}, action:any) => {
     switch (action.type) {
         case types.COUNTER_VALUE:
             return { ...state, [types.COUNTER_VALUE]: action.value };
