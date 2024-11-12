@@ -1,0 +1,24 @@
+.cardOuter {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    border: 1.5px solid white;
+    border-radius: 1vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Floating effect */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    
+    /* Glassmorphic effect */
+
+    /* Transition for smooth hover effect */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cardOuter:hover {
+    transform: scale(0.98); /* Subtle shrink effect */
+    // box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3); /* Slightly reduced shadow */
+}

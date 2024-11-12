@@ -1,0 +1,26 @@
+.appBtnOuter{
+    padding: 1.5vh 1.5vh;
+    border: 1px solid white;
+    border-radius: 1vh;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.clicked {
+    animation: scaleDown 0.2s ease forwards;
+}
+
+@keyframes scaleDown {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.9); /* Scale down slightly */
+    }
+    100% {
+        transform: scale(1); /* Scale back to original size */
+    }
+}

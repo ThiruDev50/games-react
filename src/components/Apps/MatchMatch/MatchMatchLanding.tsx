@@ -1,14 +1,29 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styles from './MatchMatchLanding.module.scss'
+import { GameCard } from '../../Common/AppComp/GameCard/GameCard'
+import { AppButton } from '../../Common/AppButton/AppButton'
+import Timer, { TimerHandle } from '../../Common/AppComp/Timer/Timer'
 
 export const MatchMatchLanding: React.FC = () => {
-    const [matrixSize, setmatrixSize] = useState<number>(5)
+    const matrixMinLimit: number = 3;
+    const matrixMaxLimit: number = 20;
+    const defaultMatrixSize: number = 4
+    const [matrixSize, setmatrixSize] = useState<number>(defaultMatrixSize)
+    const [currMatrixSize, setcurrMatrixSize] = useState<number>(defaultMatrixSize)
     const [boardData, setBoardData] = useState<string[]>([])
-    useEffect(() => {
+    const [gameKey, setGameKey] = useState(0);
+
+    const timerRef = useRef<TimerHandle>(null);
+
+    const handleStart = () => timerRef.current?.start();
+    const handlePause = () => timerRef.current?.pause();
+    const handleContinue = () => timerRef.current?.continueTimer();
+    const handleReset = () => timerRef.current?.reset();
+
+    const prepareAndSetBoardData = useCallback(() => {
         let newBoardData = prepareBoardData()
         setBoardData(newBoardData)
-    }, [matrixSize])
-
+    },[matrixSize])
     const prepareBoardData = () => {
         const squared = matrixSize * matrixSize;
 
@@ -46,21 +61,69 @@ export const MatchMatchLanding: React.FC = () => {
         const boardData = shuffleArray(doubled.slice(0, squared));
         return boardData;
     }
+    useEffect(() => {
+        prepareAndSetBoardData()
+    }, [matrixSize,prepareAndSetBoardData])
     const handleGameComplete = () => {
         alert("Game Over! All cards matched.");
     };
+
+    const increaseMatrixValue = () => {
+        if (currMatrixSize < matrixMaxLimit) {
+            let newMatrixSize = currMatrixSize + 1
+            setcurrMatrixSize(newMatrixSize)
+        }
+        else {
+            // TODO: Show some snackbar
+        }
+    }
+    const decreaseMatrixValue = () => {
+        if (currMatrixSize > matrixMinLimit) {
+            let newMatrixSize = currMatrixSize - 1
+            setcurrMatrixSize(newMatrixSize)
+        }
+        else {
+            // TODO: Show some snackbar
+        }
+    }
+
+    const resetGame = () => {
+        setmatrixSize(currMatrixSize)
+        prepareAndSetBoardData()
+        setGameKey(prevKey => prevKey + 1);
+    }
     return (
         <div className={styles.outer}>
+            <div style={{ height: "6vh" }} />
+            <GameCard label='Match-Match' />
+            <div style={{ height: "2vh" }} />
+
             <div className={styles.gameSettingsBlock}>
-                <div>
-                    Matrix
+                <div className={styles.matrixInp}>
+                    <AppButton style={{ fontWeight: "bold" }} label='Minus' onClick={decreaseMatrixValue} />
+                    <div className={styles.matrixVal}>
+                        {currMatrixSize}
+                    </div>
+                    <AppButton style={{ fontWeight: "bold", }} label='Plus' onClick={increaseMatrixValue} />
+                    <div style={{ width: "1.5vw" }}></div>
+                    <AppButton style={{ fontWeight: "bold" }} label='Reset Game' onClick={resetGame} />
+
                 </div>
                 <div>
-                    Timer
+                <Timer ref={timerRef} />
+                    <div>
+                        
+                        <button onClick={handleStart}>Start</button>
+                        <button onClick={handlePause}>Pause</button>
+                        <button onClick={handleContinue}>Continue</button>
+                        <button onClick={handleReset}>Reset</button>
+                    </div>
                 </div>
             </div>
+            <div style={{ height: "2vh" }} />
+
             <div>
-                <GameBoard onGameComplete={handleGameComplete} boardData={boardData} matrixSize={matrixSize} />
+                <GameBoard key={gameKey} onGameComplete={handleGameComplete} boardData={boardData} matrixSize={matrixSize} />
             </div>
         </div>
 
@@ -74,7 +137,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ boardData, matrixSize, onG
     useEffect(() => {
         // Total number of cards
         const totalCards = matrixSize * matrixSize;
-        const matchedCount = (matchedCards.size/2);
+        const matchedCount = (matchedCards.size / 2);
         const requiredMatchedCards = Math.floor(totalCards / 2);
 
         // If all cards are matched (or in the case of odd number of cards, all but one), trigger the game complete
@@ -181,3 +244,4 @@ interface GameBoardProps {
     boardData: string[];
     onGameComplete: () => void;
 }
+

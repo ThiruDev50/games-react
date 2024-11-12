@@ -74,3 +74,16 @@
   .flipped .inner {
     transform: rotateY(180deg); /* Flip the cell when clicked */
   }
+
+.matrixInp{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.matrixVal{
+    font-size: xx-large;
+    font-weight: bold;
+    margin:0vh 1vh;
+    user-select:'none'
+}
