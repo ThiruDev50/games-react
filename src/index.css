@@ -1,13 +1,62 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+:root {
+  --app-primary-color: #00aced;
+  --app-secondary-color: #0c1022;
+
+  --colors-gray-dark-100: hsl(0deg 0% 8.6%);
+  --colors-gray-dark-200: hsl(0deg 0% 11%);
+  --colors-gray-dark-300: hsl(0deg 0% 13.7%);
+  --colors-gray-dark-400: hsl(0deg 0% 15.7%);
+  --colors-gray-dark-500: hsl(0deg 0% 18%);
+  --colors-gray-dark-600: hsl(0deg 0% 20.4%);
+  --colors-gray-dark-700: hsl(0deg 0% 24.3%);
+  --colors-gray-dark-800: hsl(0deg 0% 31.4%);
+  --colors-gray-dark-900: hsl(0deg 0% 43.9%);
+  --colors-gray-dark-1000: hsl(0deg 0% 49.4%);
+  --colors-gray-dark-1100: hsl(0deg 0% 62.7%);
+  --colors-gray-dark-1200: hsl(0deg 0% 92.9%);
+
+  --app-text-white-color: #EDEDED;
+
+  --app-text-grey-color: #7E7E7E;
+  --app-block-bg-color: #1C1C1C;
+  --app-green-color: #37996B;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+html,
+body {
+  background-color: var(--colors-gray-dark-200);
+  margin: 0;
+  font-family: "Josefin Sans", sans-serif;
+  overflow: auto;
+}
+
+::selection {
+  background-color: var(--app-green-color);
+  color: var(--app-text-white-color);
+}
+
+::-webkit-scrollbar {
+  border-radius: 10px;
+  width: 10px;
+  /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background: #f1f1f1;
+  /* Track color */
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: var(--colors-gray-dark-100);
+  /* Thumb color */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+  background: var(--colors-gray-dark-100);
+  /* Thumb color on hover */
 }
