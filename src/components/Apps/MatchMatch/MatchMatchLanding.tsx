@@ -1,9 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styles from './MatchMatchLanding.module.scss'
 import { GameCard } from '../../Common/AppComp/GameCard/GameCard'
-import { AppButton } from '../../Common/AppButton/AppButton'
+import { AppButton, AppButtonWithChild } from '../../Common/AppButton/AppButton'
 import Timer, { TimerHandle } from '../../Common/AppComp/Timer/Timer'
-
+import { FaMinus, FaPlay, FaPlus } from "react-icons/fa";
+import { FaPause } from "react-icons/fa6";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export const MatchMatchLanding: React.FC = () => {
     const matrixMinLimit: number = 3;
     const matrixMaxLimit: number = 20;
@@ -12,7 +15,7 @@ export const MatchMatchLanding: React.FC = () => {
     const [currMatrixSize, setcurrMatrixSize] = useState<number>(defaultMatrixSize)
     const [boardData, setBoardData] = useState<string[]>([])
     const [gameKey, setGameKey] = useState(0);
-
+    const [isTimerRunning, setIsTimerRunning] = useState<boolean>(true)
     const timerRef = useRef<TimerHandle>(null);
 
     const handleStart = () => timerRef.current?.start();
@@ -23,7 +26,11 @@ export const MatchMatchLanding: React.FC = () => {
     const prepareAndSetBoardData = useCallback(() => {
         let newBoardData = prepareBoardData()
         setBoardData(newBoardData)
-    },[matrixSize])
+        handleStart()
+        setTimeout(() => {
+            handleStart()
+        }, 100)
+    }, [matrixSize])
     const prepareBoardData = () => {
         const squared = matrixSize * matrixSize;
 
@@ -63,9 +70,9 @@ export const MatchMatchLanding: React.FC = () => {
     }
     useEffect(() => {
         prepareAndSetBoardData()
-    }, [matrixSize,prepareAndSetBoardData])
+    }, [matrixSize, prepareAndSetBoardData,])
     const handleGameComplete = () => {
-        alert("Game Over! All cards matched.");
+        // alert("Game Over! All cards matched.");
     };
 
     const increaseMatrixValue = () => {
@@ -88,10 +95,34 @@ export const MatchMatchLanding: React.FC = () => {
     }
 
     const resetGame = () => {
+        handleReset()
         setmatrixSize(currMatrixSize)
         prepareAndSetBoardData()
         setGameKey(prevKey => prevKey + 1);
+        setIsTimerRunning(true)
     }
+
+    const timerClicked = () => {
+        // notify()
+        if (isTimerRunning) {
+            setIsTimerRunning(false)
+            handlePause()
+
+        }
+        else {
+            setIsTimerRunning(true)
+            handleContinue()
+        }
+    }
+
+    const resetTimerClicked = () => {
+        handleReset();
+        setIsTimerRunning(true)
+        setTimeout(() => {
+            handleStart()
+        }, 100)
+    }
+    const notify = () => toast("Wow so easy!");
     return (
         <div className={styles.outer}>
             <div style={{ height: "6vh" }} />
@@ -100,24 +131,36 @@ export const MatchMatchLanding: React.FC = () => {
 
             <div className={styles.gameSettingsBlock}>
                 <div className={styles.matrixInp}>
-                    <AppButton style={{ fontWeight: "bold" }} label='Minus' onClick={decreaseMatrixValue} />
+                    <AppButtonWithChild onClick={decreaseMatrixValue}>
+                        <FaMinus size={20} />
+                    </AppButtonWithChild>
                     <div className={styles.matrixVal}>
                         {currMatrixSize}
                     </div>
-                    <AppButton style={{ fontWeight: "bold", }} label='Plus' onClick={increaseMatrixValue} />
+                    <AppButtonWithChild onClick={increaseMatrixValue}>
+                        <FaPlus size={20} />
+                    </AppButtonWithChild>
                     <div style={{ width: "1.5vw" }}></div>
                     <AppButton style={{ fontWeight: "bold" }} label='Reset Game' onClick={resetGame} />
 
                 </div>
                 <div>
-                <Timer ref={timerRef} />
-                    <div>
-                        
-                        <button onClick={handleStart}>Start</button>
-                        <button onClick={handlePause}>Pause</button>
-                        <button onClick={handleContinue}>Continue</button>
-                        <button onClick={handleReset}>Reset</button>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: 'center', gap: "2vw", flexWrap: 'wrap' }}>
+                        <AppButtonWithChild onClick={timerClicked}>
+                            <div className={styles.timerOuter}>
+                                <div style={{ width: "5vw" }}>
+                                    <Timer ref={timerRef} />
+                                </div>
+                                <div style={{ width: "0.3vw" }}></div>
+                                {!isTimerRunning ? <FaPlay size={16} className={styles.playPauseIcon} /> : <FaPause size={16} className={styles.playPauseIcon} />}
+                            </div>
+                        </AppButtonWithChild>
+
+                        <AppButton label='Reset Timer' onClick={resetTimerClicked}>
+
+                        </AppButton>
                     </div>
+
                 </div>
             </div>
             <div style={{ height: "2vh" }} />
@@ -228,12 +271,12 @@ export const GameCell: React.FC<GameCellProps> = ({
         >
             <div className={styles.inner}>
                 <div className={styles.front}>
-                    {/* ✨ */}
-                    {actualData}
+                    ✨
+                    {/* {actualData} */}
                 </div>
                 <div className={styles.back}>
-                    {/* {actualData} */}
-                    ✨
+                    {actualData}
+                    {/* ✨ */}
                 </div>
             </div>
         </div>

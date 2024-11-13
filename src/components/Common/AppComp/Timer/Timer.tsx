@@ -75,8 +75,8 @@ const Timer = forwardRef<TimerHandle>((_, ref) => {
     }, []);
 
     return (
-        <div>
-            <h2>{formatTime(milliseconds)}</h2>
+        <div >
+            {formatTime(milliseconds)}
         </div>
     );
 });
